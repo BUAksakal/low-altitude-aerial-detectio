@@ -1,0 +1,11 @@
+# Dataset configuration for low-altitude aerial object detection
+# Update 'path' to your local dataset root before training.
+
+path: /path/to/your/data/splits   # <-- change this to your absolute path
+
+train: images/train
+val:   images/val
+test:  images/test
+
+nc: 2
+names: ['person', 'car']
