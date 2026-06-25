@@ -182,3 +182,7 @@ python test.py    # evaluate on test split
 ## 📄 License
 
 Academic research project — THI × Fraunhofer IVI × THD collaboration, SS26.
+---
+
+*Part of the Student Case-Study Project Program — THI / Fraunhofer IVI / THD, SS26*  
+*Group-One — Team Lead: Aksakal Berke Ugur · Haggag Seifeldin · Rihani Yazan Daniel · Uzun Recep*
