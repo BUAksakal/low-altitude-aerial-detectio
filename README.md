@@ -65,27 +65,38 @@ https://github.com/user-attachments/assets/6bf30f82-0f2c-4328-b598-dad79f8f0d81
 
 ## 📊 Results
 
-### Overall Performance
+<table>
+<tr>
+<td valign="top">
+
+**Overall Performance**
 
 | Metric | Value |
 |---|---|
-| **mAP@0.5** | **0.918** |
-| **mAP@0.5:0.95** | **0.850** |
-| **Precision** | **0.956** |
-| **Recall** | **0.926** |
-| **F1 Score** | **0.94** |
+| mAP@0.5 | **0.918** |
+| mAP@0.5:0.95 | **0.850** |
+| Precision | **0.956** |
+| Recall | **0.926** |
+| F1 Score | **0.94** |
 | Inference Speed | 2.3 ms / image |
 
-### Per-Class Breakdown
+</td>
+<td valign="top">
 
-| Class | Images | Instances | Precision | Recall | mAP@0.5 | mAP@0.5:0.95 |
-|---|---|---|---|---|---|---|
-| **All** | 231 | 501 | 0.956 | 0.926 | **0.918** | 0.850 |
-| Human | 188 | 385 | 0.949 | 0.958 | 0.951 | 0.845 |
-| Bicycle | 34 | 55 | 0.918 | 0.818 | 0.807 | 0.713 |
-| Vehicle | 61 | 61 | 1.000 | 1.000 | 0.995 | 0.993 |
+**Per-Class Breakdown**
 
-> Bicycle scores lower due to class imbalance (597 instances vs 3,642 Human). Vehicle achieves perfect precision and recall — visually distinct from top-down perspective.
+| Class | Precision | Recall | mAP@0.5 |
+|---|---|---|---|
+| All | 0.956 | 0.926 | **0.918** |
+| Human | 0.949 | 0.958 | 0.951 |
+| Bicycle | 0.918 | 0.818 | 0.807 |
+| Vehicle | 1.000 | 1.000 | **0.995** |
+
+</td>
+</tr>
+</table>
+
+> Bicycle scores lower due to class imbalance (597 vs 3,642 Human). Vehicle achieves perfect precision and recall.
 
 ### Evaluation Curves
 
@@ -102,6 +113,10 @@ https://github.com/user-attachments/assets/6bf30f82-0f2c-4328-b598-dad79f8f0d81
 
 ## 🗂️ Dataset
 
+<table>
+<tr>
+<td valign="top">
+
 | Metric | Value |
 |---|---|
 | Total Annotations | 4,776 |
@@ -110,13 +125,20 @@ https://github.com/user-attachments/assets/6bf30f82-0f2c-4328-b598-dad79f8f0d81
 | Distinct Scenes | 4 |
 | Negative Samples | ~15% |
 | Format | YOLO (.txt) |
-| Dataset Split | 80% train / 10% val / 10% test |
+| Dataset Split | 80 / 10 / 10 |
+
+</td>
+<td valign="top">
 
 | Class ID | Name | Count | Share |
 |---|---|---|---|
 | 0 | Human | 3,642 | 76.2% |
 | 1 | Bicycle | 597 | 12.5% |
 | 2 | Vehicle | 537 | 11.2% |
+
+</td>
+</tr>
+</table>
 
 Annotations were created using **[Roboflow](https://roboflow.com/)** with strict labeling rules: tight bounding boxes, shadows excluded, occlusion threshold ≥20%, and ~15% negative samples to reduce false positives.
 
