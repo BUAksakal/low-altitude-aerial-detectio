@@ -58,12 +58,6 @@ Existing aerial datasets (VisDrone, UAVDT) are designed for flights above 30 met
 
 <br>
 
-
-
-
-
-
-
 https://github.com/user-attachments/assets/6bf30f82-0f2c-4328-b598-dad79f8f0d81
 > *YOLOv8n · 2x speed · conf=0.50*
 
@@ -91,13 +85,22 @@ https://github.com/user-attachments/assets/6bf30f82-0f2c-4328-b598-dad79f8f0d81
 | Bicycle | 34 | 55 | 0.918 | 0.818 | 0.807 | 0.713 |
 | Vehicle | 61 | 61 | 1.000 | 1.000 | 0.995 | 0.993 |
 
-> **Note:** Bicycle scores lower due to class imbalance (597 instances vs 3,642 Human). Vehicle achieves perfect precision and recall — visually distinct from top-down perspective.
+> Bicycle scores lower due to class imbalance (597 instances vs 3,642 Human). Vehicle achieves perfect precision and recall — visually distinct from top-down perspective.
+
+### Evaluation Curves
+
+<p align="center">
+  <img src="results/PR_curve.jpeg" width="45%"/>
+  <img src="results/F1_curve.jpeg" width="45%"/>
+</p>
+<p align="center">
+  <img src="results/confusion_matrix_normalized.jpeg" width="45%"/>
+  <img src="results/R_curve.jpeg" width="45%"/>
+</p>
 
 ---
 
 ## 🗂️ Dataset
-
-### Statistics
 
 | Metric | Value |
 |---|---|
@@ -109,159 +112,51 @@ https://github.com/user-attachments/assets/6bf30f82-0f2c-4328-b598-dad79f8f0d81
 | Format | YOLO (.txt) |
 | Dataset Split | 80% train / 10% val / 10% test |
 
-### Classes
-
 | Class ID | Name | Count | Share |
 |---|---|---|---|
 | 0 | Human | 3,642 | 76.2% |
 | 1 | Bicycle | 597 | 12.5% |
 | 2 | Vehicle | 537 | 11.2% |
 
-### Scenes
-
-| Scene | Videos | Annotations |
-|---|---|---|
-| DK_backyard | v1, v3, v5 | 1,342 |
-| DK_parking | v3, v4 | 1,757 |
-| THI_Bikepark | v1, v3 | 1,248 |
-| THI_Grass | v1, v2, v3 | 429 |
-
-### Annotation Tool
-
-Annotations were created using **[Roboflow](https://roboflow.com/)** — a web-based collaborative labeling platform with built-in quality review, version control, and direct YOLO export.
-
-**Labeling rules enforced:**
-- Tight bounding boxes — zero padding, edge-to-edge
-- Physical silhouette only — shadows excluded
-- Occlusion threshold — label if ≥20% of object visible
-- Negative samples — ~15% empty frames to reduce false positives
+Annotations were created using **[Roboflow](https://roboflow.com/)** with strict labeling rules: tight bounding boxes, shadows excluded, occlusion threshold ≥20%, and ~15% negative samples to reduce false positives.
 
 ---
 
 ## 🛠️ Model & Training
 
-### Architecture
-
-- **Model:** YOLOv8n (Nano) — optimized for edge/drone devices
+- **Model:** YOLOv8n — optimized for edge/drone devices
 - **Base weights:** COCO pretrained (`yolov8n.pt`)
 - **Platform:** Google Colab (T4 GPU)
 - **Export:** ONNX
 
-### Training Configuration
-
 ```python
-from ultralytics import YOLO
-
-model = YOLO("yolov8n.pt")
 model.train(
     data="./unified_dataset_80_10_10/data.yaml",
-    epochs=150,
-    imgsz=640,
-    batch=16,
-    device=0,
-    workers=4,
-    project="Ariel_Project",
-    name="drone_model_final",
-    save=True,
-    plots=True,
-
-    # Early stopping
-    patience=15,          # Stops if mAP doesn't improve for 15 epochs
-
-    # Aerial-specific optimizations
-    box=7.5,              # Enforces strict edge-to-edge bounding constraints
-    cls=1.5,              # Higher weight on exact object classifications
-    cos_lr=True,          # Smooth cosine learning rate decay
+    epochs=150, imgsz=640, batch=16,
+    patience=15,     # early stopping
+    box=7.5,         # strict bounding box loss
+    cls=1.5,         # classification weight
+    cos_lr=True,     # cosine LR decay
 )
-```
-
-### Evaluation
-
-```python
-from ultralytics import YOLO
-
-model = YOLO("runs/detect/Ariel_Project/drone_model_final-3/weights/best.pt")
-
-metrics = model.val(
-    data="./unified_dataset_80_10_10/data.yaml",
-    split="test",         # Evaluates strictly on locked 10% test split
-    conf=0.50,
-    plots=True,
-)
-```
-
----
-
-## 🗂️ Repository Structure
-
-```
-ariel-project/
-│
-├── README.md
-├── requirements.txt
-├── .gitignore
-│
-├── assets/                       # Logos, demo images, GIFs
-│
-├── data/
-│   ├── raw/                      # Raw drone footage (not tracked)
-│   └── unified_dataset_80_10_10/ # Train/val/test split with data.yaml
-│
-├── train.py                      # Training script
-├── test.py                       # Evaluation on test split
-│
-├── runs/
-│   └── detect/
-│       └── Ariel_Project/
-│           └── drone_model_final/
-│               └── weights/
-│                   └── best.pt   # Best model weights (not tracked)
-│
-└── results/
-    ├── confusion_matrix.png
-    ├── confusion_matrix_normalized.png
-    ├── PR_curve.png
-    ├── F1_curve.png
-    └── R_curve.png
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- Python 3.10+
-- CUDA-compatible GPU (recommended) or Google Colab
-
-### Installation
-
 ```bash
-git clone https://github.com/BUAksakal/ariel-project.git
-cd ariel-project
+git clone https://github.com/BUAksakal/low-altitude-aerial-detection.git
+cd low-altitude-aerial-detection
 pip install -r requirements.txt
 ```
 
-### Train
-
 ```bash
-python train.py
+python train.py   # fine-tune
+python test.py    # evaluate on test split
 ```
-
-### Evaluate on Test Split
-
-```bash
-python test.py
-```
-
----
 
 ---
 
 ## 📄 License
 
-This project is developed for academic research purposes as part of the THI × Fraunhofer IVI × THD collaboration.
-
----
-
-*Part of the Student Case-Study Project Program — THI / Fraunhofer IVI / THD, SS26*
+Academic research project — THI × Fraunhofer IVI × THD collaboration, SS26.
