@@ -178,18 +178,6 @@ python test.py    # evaluate on test split
 ```
 
 ---
-
-## 👥 Team
-
-| Name | GitHub | Institution |
-|---|---|---|
-| Berke Uğur Aksakal | [@BUAksakal](https://github.com/BUAksakal) | THI × THD |
-| Seifeldin Haggag | [@Seifeldin-Haggag](https://github.com/Seifeldin-Haggag) | THI × THD |
-| Yazan Rihani | — | THI × THD |
-| Recep Uzun | [@salamon30](https://github.com/salamon30) | THI × THD |
-
----
-
 ## 📄 License
 
 Academic research project — THI × Fraunhofer IVI × THD collaboration, SS26.
